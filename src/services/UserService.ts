@@ -1,26 +1,14 @@
-import fetch = require('node-fetch');
-import path = require('path');
-const fs = require('fs').promises;
+import fetch from 'node-fetch';
+import * as path from 'path';
+import { promises as fs } from 'fs';
 
-interface UserData {
-  data: {
-    id: number,
-    email: string,
-    "first_name": string,
-    "last_name": string,
-    avatar: string
-  }
-}
+import { UserData, UserResponse, IUserService } from '../interfaces';
 
-interface IUserService {
-  avatarsPath: string,
-  reqresUrl: string,
-  getUser: (userId: string) => JSON,
-  getUserAvatar: (userId: string) => string,
-  deleteUserAvatar: (userId: string) => boolean;
-}
 
 class UserService implements IUserService {
+  reqresUrl: string = '';
+  avatarsPath: string = '';
+
   constructor() {
     this.reqresUrl = 'https://reqres.in/api/users';
     this.avatarsPath = path.resolve(__dirname, '../../static/avatars');
@@ -28,15 +16,15 @@ class UserService implements IUserService {
 
   async getUser(userId: string) {
     const response = await fetch(`${this.reqresUrl}/${userId}`);
-    const json: UserData = await response.json();
+    const responseJson: UserResponse = await response.json();
 
-    return json;
+    return responseJson.data;
   }
 
   async getUserAvatar(userId: string) {
     const userInfo: UserData = await this.getUser(userId);
     
-    const avatarUrl = userInfo.data.avatar;
+    const avatarUrl = userInfo.avatar;
     
     const existingAvatars = await fs.readdir(this.avatarsPath);
     const avatarExists = existingAvatars.find((imgName: string) => imgName === `${userId}.jpg`);
@@ -63,4 +51,4 @@ class UserService implements IUserService {
   }
 }
 
-module.exports = new UserService();
+export default new UserService();

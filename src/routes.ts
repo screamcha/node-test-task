@@ -1,5 +1,5 @@
-import express = require('express');
-import UserService = require('./services/UserService');
+import express from 'express';
+import UserService from './services/UserService';
 
 const router: express.Router = express.Router();
 
