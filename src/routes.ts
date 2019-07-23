@@ -4,27 +4,39 @@ import UserService = require('./services/UserService');
 const router: express.Router = express.Router();
 
 router.get('/:userId/avatar', async (req: express.Request, res: express.Response) => {
-  const { userId } = req.params;
-
-  const data = await UserService.getUserAvatar(userId);
-
-  res.send(data);
+  try {
+    const { userId } = req.params;
+  
+    const data = await UserService.getUserAvatar(userId);
+  
+    res.send(data);
+  } catch (err) {
+    res.status(500).end();
+  }
 });
 
 router.get('/:userId', async (req: express.Request, res: express.Response) => {
-  const { userId } = req.params;
+  try {
+    const { userId } = req.params;
 
-  const data = await UserService.getUser(userId);
+    const data = await UserService.getUser(userId);
 
-  res.send(data);
+    res.send(data);
+  } catch (err) {
+    res.status(500).end();
+  }
 });
 
 router.delete('/:userId/avatar', async (req: express.Request, res: express.Response) => {
-  const { userId } = req.params;
+  try {
+    const { userId } = req.params;
 
-  const data = await UserService.deleteUserAvatar(userId);
+    const data = await UserService.deleteUserAvatar(userId);
 
-  res.send(data);
+    res.send(data);
+  } catch (err) {
+    res.status(500).end();
+  }
 });
 
 export default router;
