@@ -2,6 +2,16 @@ import fetch = require('node-fetch');
 import path = require('path');
 const fs = require('fs').promises;
 
+interface UserData {
+  data: {
+    id: number,
+    email: string,
+    "first_name": string,
+    "last_name": string,
+    avatar: string
+  }
+}
+
 interface IUserService {
   avatarsPath: string,
   reqresUrl: string,
@@ -18,13 +28,13 @@ class UserService implements IUserService {
 
   async getUser(userId: string) {
     const response = await fetch(`${this.reqresUrl}/${userId}`);
-    const json = await response.json();
+    const json: UserData = await response.json();
 
     return json;
   }
 
   async getUserAvatar(userId: string) {
-    const userInfo = await this.getUser(userId);
+    const userInfo: UserData = await this.getUser(userId);
     
     const avatarUrl = userInfo.data.avatar;
     
